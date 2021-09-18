@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 import argparse
 import csv
+import decimal
 import sqlite3
 from collections import namedtuple
 
@@ -18,6 +19,7 @@ parser.add_argument('database',
 Movement = namedtuple('Movement', ['date', 'type', 'amount'])
 Trade = namedtuple('Trade', ['date', 'name', 'isin', 'symbol', 'exchange', 'type', 'price', 'quantity', 'total'])
 
+QTY_FACTOR = 100000
 
 SCHEMA = """
     create table if not exists trades (
@@ -29,7 +31,7 @@ SCHEMA = """
         exchange text,
         type text check(type in ('Buy', 'Sell')) not null,
         price decimal(11, 4) not null,
-        quantity decimal(12, 5) not null,
+        quantity integer not null,
         total decimal(9, 2) not null
     );
 
@@ -47,7 +49,8 @@ def get_trades(tradesfp):
     next(reader)
 
     for line in reader:
-        t = Trade(*line)
+        date, name, isin, symbol, exchange, type_, price, quantity, total = line
+        t = Trade(date, name, isin, symbol, exchange, type_, price, int(decimal.Decimal(quantity) * QTY_FACTOR), total)
         yield t
 
 def get_movements(movementsfp):
