@@ -10,7 +10,6 @@ from ETFmatic, in CSV format.
 - `reconcile.py`: reconciles sale transactions against purchase transactions on a FIFO cost basis
 - `capgains.py`: generates textual reports on capital gains for a given calendar year
 
-**N.B.** There is at least one significant bug in this code at the moment. Use it
-with caution.
+**N.B.** There are almost certainly bugs in this code. Use at your own risk.
 
 NO WARRANTY OF ANY KIND IS OFFERED BY THE ORIGINAL AUTHOR OF THIS CODE

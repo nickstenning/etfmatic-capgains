@@ -64,7 +64,8 @@ def reconcile(conn, sale):
         # we should not arrive here with no reconciliation to do
         assert unreconciled_qty > 0
 
-        available_to_reconcile = min(unreconciled_qty, pur['quantity'])
+        already_reconciled = pur['reconciled_quantity'] or 0
+        available_to_reconcile = min(unreconciled_qty, pur['quantity'] - already_reconciled)
 
         print(f"reconciling {available_to_reconcile} of sale {sale['id']} ({sale['quantity']}) from {sale['date']} against purchase {pur['id']} ({pur['quantity']}) from {pur['date']}")
 
