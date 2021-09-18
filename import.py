@@ -41,6 +41,15 @@ SCHEMA = """
         type text check(type in ('Dividends', 'Invoice', 'Funding', 'Divestment')) not null,
         amount decimal(9, 2) not null
     );
+
+    create table if not exists reconciliation (
+        id integer primary key asc,
+        purchase_id integer not null,
+        sale_id integer not null,
+        quantity integer not null,
+        foreign key(purchase_id) references trades(id),
+        foreign key(sale_id) references trades(id)
+    );
 """
 
 def get_trades(tradesfp):
