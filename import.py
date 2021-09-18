@@ -30,16 +30,16 @@ SCHEMA = """
         symbol text,
         exchange text,
         type text check(type in ('Buy', 'Sell')) not null,
-        price decimal(11, 4) not null,
+        price text not null,
         quantity integer not null,
-        total decimal(9, 2) not null
+        total text not null
     );
 
     create table if not exists movements (
         id integer primary key asc,
         date text not null,
         type text check(type in ('Dividends', 'Invoice', 'Funding', 'Divestment')) not null,
-        amount decimal(9, 2) not null
+        amount text not null
     );
 
     create table if not exists reconciliation (
