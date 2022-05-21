@@ -23,13 +23,21 @@ def iter_results(cur):
 
 
 def find_year_dividends(cur, year):
+    # For reasons unclear to me, ETFmatic's annual statements for any given year
+    # Y seem to count dividends issued from (Y + 14d, Y + 1y + 14d].
+    #
+    # That is, for the statement for the year 2020, the dividend calculation
+    # would include dividends issued:
+    #   - after 2020-01-15
+    #   - up to and including 2021-01-15.
     cur.execute("""
         select date, amount
         from movements
         where type = 'Dividends'
-        and strftime('%Y', date) = ?
+        and date > date(? || '-01-01', '+14 days')
+        and date <= date(? || '-01-01', '+14 days', '+1 year')
         order by date asc
-    """, (str(year),))
+    """, (str(year), str(year)))
     return iter_results(cur)
 
 
@@ -138,9 +146,17 @@ def main():
     print(f"CAPITAL INVESTMENTS TAX SUMMARY, {args.year}")
     print("#####################################")
     print()
+    print("All amounts are denominated in EUR.")
+    print()
 
     print("Dividends")
     print("---------")
+    print()
+    print("N.B. ETFmatic annual statements appear to sum dividends paid from")
+    print("16 Jan in the current calendar year up until (and including) 15 Jan")
+    print("of the following calendar year. This report reproduces that")
+    print("calculation in order to avoid confusion.")
+    print()
     dividends = dividends_summary(conn, args.year)
 
     print()
