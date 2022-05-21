@@ -68,7 +68,7 @@ def single_sale_summary(sale_total, purchase_total):
     print()
     print(f"    Sale total            = {sale_total:12.4f}")
     print(f"    Purchase total        = {purchase_total:12.4f}")
-    print(f"    Net profit on sale    = {sale_total - purchase_total:12.4f}")
+    print(f"    Net profit            = {sale_total - purchase_total:12.4f}")
 
 
 def dividends_summary(conn, year):
@@ -85,7 +85,7 @@ def dividends_summary(conn, year):
     return year_dividends
 
 
-def sales_profit_summary(conn, year):
+def capital_gains_summary(conn, year):
     cur = conn.cursor()
 
     year_profit = D(0)
@@ -135,8 +135,8 @@ def main():
     getcontext().traps[FloatOperation] = True
 
 
-    print(f"CAPITAL GAINS SUMMARY, {args.year}")
-    print("###########################")
+    print(f"CAPITAL INVESTMENTS TAX SUMMARY, {args.year}")
+    print("#####################################")
     print()
 
     print("Dividends")
@@ -144,15 +144,13 @@ def main():
     dividends = dividends_summary(conn, args.year)
 
     print()
-    print("Sales")
-    print("-----")
-    sale_profit = sales_profit_summary(conn, args.year)
+    print("Capital gains")
+    print("-------------")
+    capital_gains = capital_gains_summary(conn, args.year)
 
     print()
     print(f"Total dividends           = {dividends:12.4f}")
-    print(f"Total sales profit        = {sale_profit:12.4f}")
-    print(f"GRAND TOTAL CAPITAL GAINS = {dividends + sale_profit:12.4f}")
-
+    print(f"Total capital gains       = {capital_gains:12.4f}")
 
 if __name__ == "__main__":
     main()
