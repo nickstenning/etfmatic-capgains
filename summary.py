@@ -120,7 +120,7 @@ def capital_gains_summary(conn, year):
             print(f"Sale of {e['sale_name']} (ISIN {e['sale_isin']})")
             print(f"    Sell ({e['sale_date']}): {qty(e['sale_quantity']):19.5f} units @ {D(e['sale_price']):12.4f} = {D(e['sale_total']):12.4f}")
 
-        reconciled_proportion = round(D(e['reconciliation_quantity'])/D(e['purchase_quantity']), 2)
+        reconciled_proportion = D(e['reconciliation_quantity'])/D(e['purchase_quantity'])
         reconciled_total = reconciled_proportion * D(e['purchase_total'])
         purchase_total += reconciled_total
         print(f"    Buy  ({e['purchase_date']}): {qty(e['reconciliation_quantity']):9.5f}/{qty(e['purchase_quantity']):9.5f} units @ {D(e['purchase_price']):12.4f} = {reconciled_total:12.4f}")
